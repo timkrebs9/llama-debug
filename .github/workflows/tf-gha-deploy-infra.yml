@@ -49,7 +49,9 @@ jobs:
   azure-cli-update:
     runs-on: ubuntu-latest
     steps:
-    - name: Use Azure CLI
-      uses: azure/CLI@v1
-      with:
-        azcliversion: 'latest'
+    - name: Install Azure CLI and Run Commands
+      run: |
+        # Install the latest version of Azure CLI
+        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+        # Login to Azure
+        az login --service-principal -u ${{ secrets.ARM_CLIENT_ID }} -p ${{ secrets.ARM_CLIENT_SECRET }} --tenant ${{ secrets.ARM_TENANT_ID }}
