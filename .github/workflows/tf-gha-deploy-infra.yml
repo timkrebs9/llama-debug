@@ -1,14 +1,15 @@
 name: tf-gha-deploy-infra.yml
- 
+
 on: 
   workflow_dispatch:
 env:
-    config_env: 'none'
+  config_env: 'none'
 jobs:
   get-config:
-      uses: Azure/mlops-templates/.github/workflows/read-yaml.yml@main
-      with:
-        file_name: config-infra-prod.yml
+    uses: Azure/mlops-templates/.github/workflows/read-yaml.yml@main
+    with:
+      file_name: config-infra-prod.yml
+
   test-terraform-state-deployment:
     needs: get-config
     uses: Azure/mlops-templates/.github/workflows/tf-gha-install-terraform.yml@main
@@ -20,7 +21,7 @@ jobs:
       postfix: ${{ needs.get-config.outputs.postfix }}
       environment: ${{ needs.get-config.outputs.environment }}
       enable_aml_computecluster: ${{ needs.get-config.outputs.enable_aml_computecluster == true }} ## TBD review the evaluation of boolean
-      enable_monitoring: ${{ needs.get-config.outputs.enable_monitoring == true  }} ## TBD review the evaluation of boolean
+      enable_monitoring: ${{ needs.get-config.outputs.enable_monitoring == true }} ## TBD review the evaluation of boolean
       terraform_version: ${{ needs.get-config.outputs.terraform_version }}
       terraform_workingdir: ${{ needs.get-config.outputs.terraform_workingdir }}
       terraform_st_location: ${{ needs.get-config.outputs.terraform_st_location }}
@@ -36,6 +37,7 @@ jobs:
       clientSecret: ${{ secrets.ARM_CLIENT_SECRET }}
       subscriptionId: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       tenantId: ${{ secrets.ARM_TENANT_ID }}
+
   deploy-azureml-resources:
     runs-on: ubuntu-latest
     steps:
@@ -43,3 +45,16 @@ jobs:
       name: deploy-aml-workspace
       run: echo "OK"
 
+  # Update the Azure CLI action to use the latest version
+  azure-cli-update:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Use Azure CLI
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 'latest' # Update to the latest version of Azure CLI
+
+    # Debugging steps to check CLI commands
+    - name: Enable Azure CLI Debugging
+      run: |
+        export AZURE_CORE_LOG_LEVEL='debug'
