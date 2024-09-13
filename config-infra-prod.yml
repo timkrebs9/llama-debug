@@ -7,8 +7,8 @@ variables:
   # Global
   ap_vm_image: ubuntu-20.04
 
-  namespace: mlops
-  postfix: ao04
+  namespace: llama
+  postfix: dbg01
   location: westus2
 
   environment: prod
