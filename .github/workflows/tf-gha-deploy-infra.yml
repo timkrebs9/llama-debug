@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
 env:
   config_env: 'none'
+
 jobs:
   get-config:
     uses: Azure/mlops-templates/.github/workflows/read-yaml.yml@main
@@ -45,16 +46,10 @@ jobs:
       name: deploy-aml-workspace
       run: echo "OK"
 
-  # Update the Azure CLI action to use the latest version
   azure-cli-update:
     runs-on: ubuntu-latest
     steps:
     - name: Use Azure CLI
       uses: azure/CLI@v1
       with:
-        azcliversion: 'latest' # Update to the latest version of Azure CLI
-
-    # Debugging steps to check CLI commands
-    - name: Enable Azure CLI Debugging
-      run: |
-        export AZURE_CORE_LOG_LEVEL='debug'
+        azcliversion: 'latest'
